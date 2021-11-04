@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				-90,
+				-119
+			],
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "Filip Idle"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-80,
+				-136
+			],
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "Filip Left"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-90,
+				-133
+			],
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "Filip Right"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-90,
+				-136
+			],
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "Filip Down"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-88,
+				-117
+			],
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "Filip Up"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/Filip_assets",
+	"position": [
+		0,
+		0
+	],
+	"healthicon": "filip",
+	"flip_x": false,
+	"healthbar_colors": [
+		40,
+		20,
+		0
+	],
+	"camera_position": [
+		-40,
+		160
+	],
+	"sing_duration": 4,
+	"scale": 1
+}
