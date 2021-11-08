@@ -48,6 +48,9 @@ class TitleState extends MusicBeatState
 
 	var wackyImage:FlxSprite;
 
+	var mustUpdate:Bool = false;
+	public static var updateVersion:String = '';
+
 	override public function create():Void
 	{
 		#if (polymod && !html5)
@@ -107,7 +110,7 @@ class TitleState extends MusicBeatState
 		if(FlxG.save.data.flashing == null && !FlashingState.leftState) {
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
-			MusicBeatState.switchState(new FlashingState());
+			MusicBeatState.switchState(new TitleState());
 		} else {
 			#if desktop
 			DiscordClient.initialize();
@@ -124,13 +127,10 @@ class TitleState extends MusicBeatState
 	}
 
 	var bg:FlxSprite;
-	var logoBl:FlxSprite;
-	var star:FlxSprite;
-	var bottomLine:FlxSprite;
-	var topLine:FlxSprite;
+	var piggyLogo:FlxSprite;
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
-	var titleText:FlxSprite;
+	var playButton:FlxSprite;
 	var swagShader:ColorSwap = null;
 
 	function startIntro()
@@ -168,32 +168,31 @@ class TitleState extends MusicBeatState
 		Conductor.changeBPM(102);
 		persistentUpdate = true;
 
-		bg = new FlxSprite().loadGraphic(Paths.image('titlescreen/bgTitleScreen'));
-		bg.antialiasing = ClientPrefs.globalAntialiasing;
-		bg.updateHitbox();
-		add(bg);
-
 		// note for future self (and for beginners too): to change the positions of the sprites correctly,
 		// use the reference below.
 
         // left.x = "smaller number" right.x = "bigger number" down.y = "smaller number" up.y = "bigger number"
 
-		logoBl = new FlxSprite(100, 0);
-		logoBl.frames = Paths.getSparrowAtlas('titlescreen/logoBumpin');
-		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
-		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
-		logoBl.animation.play('bump');
-		logoBl.updateHitbox();
-		add(logoBl);
+		bg = new FlxSprite().loadGraphic(Paths.image('titlescreen/bgPiggyBook2'));
+		bg.antialiasing = ClientPrefs.globalAntialiasing;
+		bg.updateHitbox();
+		add(bg);
 
-		titleText = new FlxSprite(125, FlxG.height * 0.8);
-		titleText.frames = Paths.getSparrowAtlas('titlescreen/titleEnter');
-		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
-		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-		titleText.antialiasing = ClientPrefs.globalAntialiasing;
-		titleText.animation.play('idle');
-		titleText.updateHitbox();
-		add(titleText);
+		piggyLogo = new FlxSprite(270, 50).loadGraphic(Paths.image('titlescreen/piggyLogo'));
+		piggyLogo.scale.set(0.5, 0.5);
+		piggyLogo.antialiasing = ClientPrefs.globalAntialiasing;			
+		piggyLogo.updateHitbox();
+		add(piggyLogo);
+
+		playButton = new FlxSprite(400, FlxG.height * 0.8);
+		playButton.frames = Paths.getSparrowAtlas('titlescreen/playButton');
+		playButton.animation.addByPrefix('idle', "Press Enter to Begin", 24);
+		playButton.animation.addByPrefix('press', "ENTER PRESSED", 24);
+		playButton.antialiasing = ClientPrefs.globalAntialiasing;
+		playButton.animation.play('idle');
+		playButton.scale.set(0.81, 0.81);
+		playButton.updateHitbox();
+		add(playButton);
 
 		credGroup = new FlxGroup();
 		add(credGroup);
@@ -276,23 +275,30 @@ class TitleState extends MusicBeatState
 			#end
 		}
 
-		if (pressedEnter && !transitioning && skippedIntro)
-		{
-			if(titleText != null) titleText.animation.play('press');
-
-			FlxG.camera.flash(FlxColor.WHITE, 1);
-			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
-
-			transitioning = true;
-			// FlxG.sound.music.stop();
-
-			new FlxTimer().start(1, function(tmr:FlxTimer)
+		if (!transitioning && skippedIntro)
 			{
-				MusicBeatState.switchState(new MainMenuState());
-				closedState = true;
-			});
-			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
-		}
+				if(pressedEnter)
+				{
+					if(playButton != null) playButton.animation.play('press');
+					
+					FlxG.camera.flash(FlxColor.RED, 1);
+					FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+	
+					transitioning = true;
+					// FlxG.sound.music.stop();
+	
+					new FlxTimer().start(1, function(tmr:FlxTimer)
+					{
+						if (mustUpdate) {
+							MusicBeatState.switchState(new MainMenuState());
+						} else {
+							MusicBeatState.switchState(new MainMenuState());
+						}
+						closedState = true;
+					});
+					// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+				}
+			}
 
 		if (pressedEnter && !skippedIntro)
 		{
@@ -346,19 +352,9 @@ class TitleState extends MusicBeatState
 	{
 		super.beatHit();
 
-		if(logoBl != null) 
-			logoBl.animation.play('bump');
+		    FlxTween.tween(FlxG.camera, {zoom:1.05}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
+		    FlxG.log.add(curBeat);
 
-		if(gfDance != null) {
-			danceLeft = !danceLeft;
-
-			if (danceLeft)
-				gfDance.animation.play('danceRight');
-			else
-				gfDance.animation.play('danceLeft');
-		}
-
-		if(!closedState) {
 			switch (curBeat)
 			{
 				case 1:
@@ -372,7 +368,7 @@ class TitleState extends MusicBeatState
 					deleteCoolText();
 
 				case 5:
-					createCoolText(['This is a mod to'], -60);
+					createCoolText(['This is a mod of'], -60);
 				case 7:
 					addMoreText('Friday Night Funkin', -60);
 					logoSpr.visible = false;
@@ -402,7 +398,6 @@ class TitleState extends MusicBeatState
 				case 16:
 					skipIntro();
 			}
-		}
 	}
 
 	var skippedIntro:Bool = false;
@@ -413,7 +408,7 @@ class TitleState extends MusicBeatState
 		{
 			remove(logoSpr);
 
-			FlxG.camera.flash(FlxColor.WHITE, 4);
+			FlxG.camera.flash(FlxColor.RED, 4);
 			remove(credGroup);
 			skippedIntro = true;
 		}

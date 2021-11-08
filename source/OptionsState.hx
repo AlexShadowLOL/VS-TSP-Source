@@ -47,6 +47,14 @@ class OptionsState extends MusicBeatState
 		menuBG.screenCenter();
 		menuBG.antialiasing = ClientPrefs.globalAntialiasing;
 		add(menuBG);
+
+		var screen:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menubg/optionsMenuScreen'));
+		screen.setGraphicSize(Std.int(screen.width * 1.175));
+		screen.updateHitbox();
+		screen.screenCenter();
+		screen.antialiasing = ClientPrefs.globalAntialiasing;
+		screen.alpha = 0.55;		
+		add(screen);
 		
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
@@ -487,7 +495,7 @@ class PreferencesSubstate extends MusicBeatSubstate
 		}
 
 		descText = new FlxText(50, 600, 1180, "", 32);
-		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descText.setFormat(Paths.font("JAi_____.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		descText.scrollFactor.set();
 		descText.borderSize = 2.4;
 		add(descText);

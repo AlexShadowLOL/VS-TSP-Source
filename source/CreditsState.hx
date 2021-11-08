@@ -26,6 +26,7 @@ class CreditsState extends MusicBeatState
 	private static var creditsStuff:Array<Dynamic> = [
 		['VS TSP Team'],
 		['AlexShadow',		    'alexshadow',	    'Main Coder, Charter, Animator, Artist, Composer',  'https://twitter.com/AlexDaShadow',  	        0xFF35AACA],
+		['Gorwor',		        'gorwor',	        'Title Screen Logo Artist',                         'https://twitter.com/DaRealGorwor',  	        0xFFF73838],		
 		[''],	
 		['Psych Engine Team'],
 		['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',					'https://twitter.com/Shadow_Mario_',	        0xFFFFDD33],
@@ -57,6 +58,14 @@ class CreditsState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 
+		var screen:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menubg/creditsMenuScreen'));
+		screen.setGraphicSize(Std.int(screen.width * 1.175));
+		screen.updateHitbox();
+		screen.screenCenter();
+		screen.antialiasing = ClientPrefs.globalAntialiasing;
+		screen.alpha = 0.55;		
+		add(screen);
+
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
@@ -86,7 +95,7 @@ class CreditsState extends MusicBeatState
 		}
 
 		descText = new FlxText(50, 600, 1180, "", 32);
-		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descText.setFormat(Paths.font("JAi_____.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		descText.scrollFactor.set();
 		descText.borderSize = 2.4;
 		add(descText);

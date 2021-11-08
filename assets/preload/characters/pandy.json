@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				-94,
+				-119
+			],
+			"loop": false,
+			"anim": "idle",
+			"fps": 24,
+			"name": "Pandy Idle",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-88,
+				-123
+			],
+			"loop": false,
+			"anim": "singLEFT",
+			"fps": 24,
+			"name": "Pandy Left",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-96,
+				-123
+			],
+			"loop": false,
+			"anim": "singRIGHT",
+			"fps": 24,
+			"name": "Pandy Right",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-87,
+				-133
+			],
+			"loop": false,
+			"anim": "singDOWN",
+			"fps": 24,
+			"name": "Pandy Down",
+			"indices": []
+		},
+		{
+			"offsets": [
+				-13,
+				-119
+			],
+			"loop": false,
+			"anim": "singUP",
+			"fps": 24,
+			"name": "Pandy Up",
+			"indices": []
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/Pandy_assets",
+	"position": [
+		0,
+		-90
+	],
+	"healthicon": "pandy",
+	"flip_x": false,
+	"healthbar_colors": [
+		255,
+		255,
+		255
+	],
+	"camera_position": [
+		-40,
+		160
+	],
+	"sing_duration": 4,
+	"scale": 1
+}

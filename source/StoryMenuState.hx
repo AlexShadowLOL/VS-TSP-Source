@@ -12,6 +12,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
@@ -183,6 +184,14 @@ class StoryMenuState extends MusicBeatState
 		super.create();
 	}
 
+	override function beatHit()
+		{
+			super.beatHit();
+	
+				FlxTween.tween(FlxG.camera, {zoom:1.05}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
+				FlxG.log.add(curBeat);
+		}
+			
 	override function closeSubState() {
 		persistentUpdate = true;
 		changeWeek();

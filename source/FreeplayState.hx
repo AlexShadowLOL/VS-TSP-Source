@@ -12,6 +12,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import lime.utils.Assets;
 import flixel.system.FlxSound;
@@ -23,7 +24,7 @@ class FreeplayState extends MusicBeatState
 {
 	//Character head icons for your songs
 	static var songsHeads:Array<Dynamic> = [
-		['filip']
+		['filip', 'pandy']
 	];
 
 	var songs:Array<SongMetadata> = [];
@@ -94,6 +95,14 @@ class FreeplayState extends MusicBeatState
 		bg = new FlxSprite().loadGraphic(Paths.image('menubg/menuDesat'));
 		add(bg);
 
+		var screen:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menubg/freeplayMenuScreen'));
+		screen.setGraphicSize(Std.int(screen.width * 1.175));
+		screen.updateHitbox();
+		screen.screenCenter();
+		screen.antialiasing = ClientPrefs.globalAntialiasing;
+		screen.alpha = 0.7;
+		add(screen);
+
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
 
@@ -102,6 +111,8 @@ class FreeplayState extends MusicBeatState
 			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
 			songText.isMenuItem = true;
 			songText.targetY = i;
+			songText.scale.set(0.9, 0.9);
+			songText.offset.x -= 120;			
 			grpSongs.add(songText);
 
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
@@ -109,6 +120,8 @@ class FreeplayState extends MusicBeatState
 
 			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
+			icon.scale.set(0.9, 0.9);
+			icon.offset.x -= 120;
 			add(icon);
 
 			// songText.x += 40;
@@ -117,7 +130,7 @@ class FreeplayState extends MusicBeatState
 		}
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
-		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
+		scoreText.setFormat(Paths.font("JAi_____.ttf"), 32, FlxColor.WHITE, RIGHT);
 
 		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
 		scoreBG.alpha = 0.6;
@@ -162,12 +175,20 @@ class FreeplayState extends MusicBeatState
 		var leText:String = "Press RESET to Reset your Score and Accuracy.";
 		#end
 		var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, 18);
-		text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, RIGHT);
+		text.setFormat(Paths.font("JAi_____.ttf"), 18, FlxColor.WHITE, RIGHT);
 		text.scrollFactor.set();
 		add(text);
 		super.create();
 	}
 
+	override function beatHit()
+		{
+			super.beatHit();
+	
+				FlxTween.tween(FlxG.camera, {zoom:1.03}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
+				FlxG.log.add(curBeat);
+		}
+			
 	override function closeSubState() {
 		changeSelection();
 		super.closeSubState();
@@ -177,6 +198,14 @@ class FreeplayState extends MusicBeatState
 	{
 		songs.push(new SongMetadata(songName, weekNum, songCharacter));
 	}
+
+//	override function beatHit()
+//	{
+//		super.beatHit();
+//
+//		if (bg != null)
+//			FlxTween.tween(bg.scale, {x: 1.03, y: 1.03}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD}); // camera zooms
+//	}
 
 	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>)
 	{
@@ -371,6 +400,7 @@ class FreeplayState extends MusicBeatState
 
 			if (item.targetY == 0)
 			{
+				item.screenCenter(X); // cool freeplay song text movement when selected
 				item.alpha = 1;
 				// item.setGraphicSize(Std.int(item.width));
 			}
